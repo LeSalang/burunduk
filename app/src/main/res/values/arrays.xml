@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="categories">
+        <item>All food</item>
+        <item>Vegan food</item>
+
+        <item>Housewares</item>
+        <item>Hygiene</item>
+
+        <item>Health</item>
+        <item>Prepared food</item>
+
+        <item>Entertainment</item>
+        <item>Big Vacation</item>
+
+        <item>Rent</item>
+        <item>Communications</item>
+
+        <item>Clothes</item>
+        <item>Electronics</item>
+
+        <item>Transport</item>
+        <item>Other</item>
+    </string-array>
+
+    <string-array name="headlines_in_tab">
+        <item>Date</item>
+        <item>Category</item>
+        <item>Local</item>
+        <item>RUB</item>
+    </string-array>
+
+</resources>

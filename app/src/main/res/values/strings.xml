@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Burunduk</string>
+
+    <string name="add_expense">Add expense</string>
+    <string name="cancel">Cancel</string>
+    <string name="new_expense">New expense:</string>
+
+    <!-- for ExpenseEntryScreen -->
+    <string name="purchase_category">Purchase category:</string>
+    <string name="price_in_local_currency">Price in local currency:</string>
+    <string name="local_exchange_rate">Local exchange rate:</string>
+
+    <!-- for Categories -->
+    <string name="category_all_food">All food</string>
+    <string name="category_vegan_food">Vegan food</string>
+    <string name="category_housewares">Housewares</string>
+    <string name="category_hygiene">Hygiene</string>
+    <string name="category_health">Health</string>
+    <string name="category_prepared_food">Prepared food</string>
+    <string name="category_entertainment">Entertainment</string>
+    <string name="category_big_vacation">Big Vacation</string>
+    <string name="category_rent">Rent</string>
+    <string name="category_communications">Communications</string>
+    <string name="category_clothes">Clothes</string>
+    <string name="category_electronics">Electronics</string>
+    <string name="category_transport">Transport</string>
+    <string name="category_other">Other</string>
+
+    <!-- for Home Screen -->
+    <string name="date">Date</string>
+    <string name="category">Category</string>
+    <string name="local">Local</string>
+    <string name="rub">RUB</string>
+</resources>
