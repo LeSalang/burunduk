@@ -17,8 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.lesa.burunduk.R
 import com.lesa.burunduk.ui.components.MyText
+import com.lesa.burunduk.ui.navigation.AddExpense
 import com.lesa.burunduk.ui.theme.BlackBlue
 import com.lesa.burunduk.ui.theme.Red
 import com.lesa.burunduk.ui.theme.WhiteRed
@@ -31,7 +33,8 @@ fun ExpandedExpenseCard(
     date: String,
     category: String,
     local: String,
-    rub: String
+    rub: String,
+    navController: NavController
 ) {
     Card(
         colors = CardColors(
@@ -40,34 +43,24 @@ fun ExpandedExpenseCard(
             disabledContainerColor = WhiteRed,
             disabledContentColor = WhiteRed
             ),
-        //shape = RectangleShape,
-        //border = BorderStroke(1.dp, color = WhiteBlue),
         modifier = Modifier
             .fillMaxWidth()
-            //.padding(horizontal = 10.dp),
     ) {
         Row(
             Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.Top
-            //horizontalArrangement = Arrangement.SpaceAround
         ) {
             Column(
                 Modifier.padding(10.dp)
             ) {
                 Row {
                     MyText(text = "$date: $category", color = Red)
-                    /*Spacer(modifier = Modifier.size(5.dp))
-                    MyText(text = "-")
-                    Spacer(modifier = Modifier.size(5.dp))
-                    MyText(text = category, color = Red)
-*/
                 }
                 Row {
                     Column {
                         MyText(text = "local = $local")
                         MyText(text = "rub = $rub")
                     }
-
                 }
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -82,7 +75,9 @@ fun ExpandedExpenseCard(
                     "delete"
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                navController.navigate(AddExpense.route)
+            }) {
                 Icon(imageVector = Icons.Default.Settings, "")
             }
             IconButton(

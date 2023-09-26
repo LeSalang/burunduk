@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -36,11 +35,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.lesa.burunduk.R
 import com.lesa.burunduk.data.expenses.models.Category
 import com.lesa.burunduk.data.expenses.models.nameId
 import com.lesa.burunduk.ui.AppViewModelProvider
 import com.lesa.burunduk.ui.components.MyText
+import com.lesa.burunduk.ui.screens.home.HomeScreenExpense
 import com.lesa.burunduk.ui.theme.BlackBlue
 import com.lesa.burunduk.ui.theme.Red
 import com.lesa.burunduk.ui.theme.WhiteBlue
@@ -50,6 +51,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun ExpenseEntryScreen(
     viewModel: ExpenseEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    expense: HomeScreenExpense? = null,
     navigateBack: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -64,6 +66,7 @@ fun ExpenseEntryScreen(
         ExpenseInputForm(
             expenseDetails = viewModel.expenseUiState.expenseDetails,
             onValueChange = viewModel :: updateUiState,
+            expense = expense
         )
         Button(
             onClick = {
@@ -83,6 +86,7 @@ fun ExpenseEntryScreen(
 fun ExpenseInputForm(
     expenseDetails: ExpenseDetails,
     onValueChange: (ExpenseDetails) -> Unit = {},
+    expense: HomeScreenExpense?
 ) {
     Spacer(modifier = Modifier.size(10.dp))
     Card(
@@ -95,11 +99,13 @@ fun ExpenseInputForm(
         ) {
             SelectCatRadioButtons(
                 expenseDetails = expenseDetails,
-                onValueChange = onValueChange
+                onValueChange = onValueChange,
+                expense = expense
             )
             ExpenseTextField(
                 expenseDetails = expenseDetails,
-                onValueChange = onValueChange
+                onValueChange = onValueChange,
+                expense = expense
             )
         }
     }
@@ -108,7 +114,8 @@ fun ExpenseInputForm(
 @Composable
 fun ExpenseTextField(
     expenseDetails: ExpenseDetails,
-    onValueChange: (ExpenseDetails) -> Unit = {}
+    onValueChange: (ExpenseDetails) -> Unit = {},
+    expense: HomeScreenExpense?
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -120,7 +127,7 @@ fun ExpenseTextField(
         )
         Spacer(modifier = Modifier.weight(0.1f))
         TextField(
-            value = expenseDetails.local,
+            value = expense?.date?:expenseDetails.local,
             onValueChange = {
                 onValueChange(expenseDetails.copy(local = it))
             },
@@ -181,12 +188,13 @@ fun ExpenseTextField(
 @Composable
 fun SelectCatRadioButtons(
     expenseDetails: ExpenseDetails,
-    onValueChange: (ExpenseDetails) -> Unit = {}
+    onValueChange: (ExpenseDetails) -> Unit = {},
+    expense: HomeScreenExpense?
 ) {
-    val radioOptions = stringArrayResource(id = R.array.categories)
     val dBCategoryList = Category.values()
     val (selectedOption, onOptionSelected) = remember {
-        mutableStateOf(dBCategoryList[dBCategoryList.lastIndex] )
+        mutableStateOf(
+            expense?.category?:dBCategoryList[dBCategoryList.lastIndex] )
     }
     Column(
         modifier = Modifier.padding( 8.dp)

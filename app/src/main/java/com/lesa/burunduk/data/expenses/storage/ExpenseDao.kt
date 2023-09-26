@@ -19,11 +19,11 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM expense_table ORDER BY local ASC")
     fun getAllExpensesOrderByAzn(): Flow<List<DBExpense>>
-/*
-    @Query("SELECT * FROM expense_table WHERE id = :id")
-    fun getExpenseById(id: UUID): Flow<DBExpense>
-*/
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+
+    @Query("SELECT * FROM expense_table WHERE date = :day")
+    fun getSumPerDay(day: Long): Flow<DBExpense>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExpense(expense: DBExpense)
 
     @Update

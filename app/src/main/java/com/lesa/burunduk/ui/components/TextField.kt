@@ -1,12 +1,16 @@
 package com.lesa.burunduk.ui.components
 
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.keyframes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import com.lesa.burunduk.ui.theme.BlackBlue
@@ -23,6 +27,20 @@ fun MyText(
     overflow: TextOverflow = TextOverflow.Ellipsis,
     color: Color = BlackBlue
 ) {
+    val animation = remember {
+        keyframes {
+            durationMillis = 300
+            delayMillis = 100
+
+            val firstValue =  IntSize(width = 200, height = 100)
+            val firstFrame = 150
+            val secondValue =  IntSize(width = 300, height = 200)
+            val secondFrame = 250
+
+            firstValue at firstFrame
+            secondValue at secondFrame with FastOutLinearInEasing
+        }
+    }
     Text(
         text = text,
         modifier = modifier,
@@ -31,8 +49,7 @@ fun MyText(
         maxLines = maxLines,
         color = color,
         overflow = overflow,
-        fontFamily = burundukFontFamily,
-
+        fontFamily = burundukFontFamily
     )
 }
 

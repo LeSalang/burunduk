@@ -22,6 +22,10 @@ class OfflineExpensesRepository(private val expenseDao: ExpenseDao): ExpensesRep
         }
     }
 
+    override fun getSumPerDay(): Flow<Int> {
+        TODO("Not yet implemented")
+    }
+
     override suspend fun insertExpense(expense: Expense) =
         expenseDao.insertExpense(expense.toDBExpense())
 

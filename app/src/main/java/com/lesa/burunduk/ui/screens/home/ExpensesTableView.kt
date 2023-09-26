@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.lesa.burunduk.R
 import com.lesa.burunduk.ui.components.MyTextBold
 import com.lesa.burunduk.ui.theme.WhiteBlue
@@ -31,10 +32,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun ExpensesTableView(
-    homeUiState: HomeUiState,
-    viewModel: HomeViewModel
+    homeUiState: List<HomeScreenExpense>,
+    viewModel: HomeViewModel,
+    navController: NavController
 ) {
     val coroutineScope = rememberCoroutineScope()
+
     Card(
         colors = CardDefaults.cardColors(containerColor = WhiteRed),
         elevation = CardDefaults.cardElevation(defaultElevation = (-10).dp),
@@ -66,7 +69,7 @@ fun ExpensesTableView(
             }
             HorizontalDivider(color = WhiteBlue)
             LazyColumn() {
-                items(homeUiState.toHomeScreen()) { expense ->
+                items(homeUiState) { expense ->
                     Spacer(modifier = Modifier.height(8.dp))
                     var dropdownMenuExpanded by remember(
                         key1 = expense.id
@@ -84,7 +87,8 @@ fun ExpensesTableView(
                         date = expense.date,
                         category = stringResource(id = expense.category),
                         local = expense.local,
-                        rub = expense.rub
+                        rub = expense.rub,
+                        navController = navController
                     )
                     HorizontalDivider(color = WhiteBlue)
                 }
@@ -101,7 +105,8 @@ fun ExpenseCard(
     date: String,
     category: String,
     local: String,
-    rub: String
+    rub: String,
+    navController: NavController
 ) {
     if (isExpanded) {
         ExpandedExpenseCard(
@@ -111,7 +116,8 @@ fun ExpenseCard(
             date = date,
             category = category,
             local = local,
-            rub = rub
+            rub = rub,
+            navController = navController
         )
     } else {
         ReducedExpenseCard(

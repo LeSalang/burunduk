@@ -7,6 +7,8 @@ import java.util.UUID
 interface ExpensesRepository {
 
     fun getAllExpensesStream(): Flow<List<Expense>>
+
+    fun getSumPerDay(): Flow<Int>
 /*
     fun getExpenseStream(id: UUID): Flow<Expense?>
 */

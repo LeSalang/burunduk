@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.UUID
@@ -25,7 +26,7 @@ class HomeViewModel(private val expensesRepository: ExpensesRepository): ViewMod
             )
 
     companion object {
-        private const val TIMEOUT_MILLIS = 50000L
+        private const val TIMEOUT_MILLIS = 500000L
     }
 
     suspend fun deleteExpense(id: UUID) {
@@ -47,6 +48,18 @@ private fun Expense.toHomeScreen(): HomeScreenExpense {
         local = local,
         rub = rub
     )
+}
+
+fun HomeUiState.getSumForPeriod(pattern: String): Int {
+    val formatter = DateTimeFormatter.ofPattern(pattern, Locale.getDefault())
+    val currentDay = LocalDateTime.now().format(formatter)
+    var sum: Int = 0
+    expensesList.forEach {expense ->
+        val date = expense.date.format(formatter)
+        val kopecks = expense.kopecks / 100
+        if (date == currentDay) sum += kopecks
+    }
+    return sum
 }
 
 fun HomeUiState.toHomeScreen(): List<HomeScreenExpense> {
