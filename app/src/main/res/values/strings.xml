@@ -5,6 +5,9 @@
     <string name="cancel">Cancel</string>
     <string name="new_expense">New expense:</string>
 
+    <!-- for screens -->
+    <string name="settings">Settings</string>
+
     <!-- for ExpenseEntryScreen -->
     <string name="purchase_category">Purchase category:</string>
     <string name="price_in_local_currency">Price in local currency:</string>
@@ -25,10 +28,14 @@
     <string name="category_electronics">Electronics</string>
     <string name="category_transport">Transport</string>
     <string name="category_other">Other</string>
+    <string name="category_all">All categories</string>
 
     <!-- for Home Screen -->
     <string name="date">Date</string>
     <string name="category">Category</string>
     <string name="local">Local</string>
     <string name="rub">RUB</string>
+    <string name="expenses_for_day">Expenses for day = %d \u20BD</string>
+    <string name="expenses_for_week">Expenses for week = %d \u20BD</string>
+    <string name="expenses_for_month">Expenses for month = %d \u20BD</string>
 </resources>

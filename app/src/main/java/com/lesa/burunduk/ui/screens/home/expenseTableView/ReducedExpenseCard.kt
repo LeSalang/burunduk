@@ -1,4 +1,4 @@
-package com.lesa.burunduk.ui.screens.home
+package com.lesa.burunduk.ui.screens.home.expenseTableView
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -41,7 +41,7 @@ fun ReducedExpenseCard(
         Spacer(modifier = Modifier.weight(0.1f))
         MyText(
             text = category,
-            modifier = Modifier.weight(3f)
+            modifier = Modifier.weight(2.5f)
         )
         Spacer(modifier = Modifier.weight(0.1f))
         MyText(

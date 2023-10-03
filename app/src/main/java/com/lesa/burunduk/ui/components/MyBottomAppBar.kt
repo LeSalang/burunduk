@@ -50,12 +50,10 @@ fun MyBottomAppBar(
             ) {
                 Icon(
                     imageVector = if (currentScreen == AddExpense) Icons.Default.Done else Icons.Default.Add,
-                    contentDescription = "",
-                    //tint = Red
+                    contentDescription = ""
                 )
             }
         },
         containerColor = WhiteBlue
-
     )
 }

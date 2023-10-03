@@ -7,7 +7,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.lesa.burunduk.R
 import com.lesa.burunduk.ui.components.MyTextBold
 import com.lesa.burunduk.ui.theme.WhiteRed
 
@@ -24,13 +26,13 @@ fun SumTableView(
             Modifier.padding(10.dp)
         ) {
             MyTextBold(
-                text = "Expenses per day = ${sumForPeriod.getSumForPeriod("dd MM yyyy")} \u20BD"
+                text = stringResource(id = R.string.expenses_for_day, sumForPeriod.getSumForPeriod("dd MM yyyy"))
             )
             MyTextBold(
-                text = "Expenses per week = ${sumForPeriod.getSumForPeriod("ww yyyy")} \u20BD"
+                text = stringResource(id = R.string.expenses_for_week, sumForPeriod.getSumForPeriod("ww yyyy"))
             )
             MyTextBold(
-                text = "Expenses per month = ${sumForPeriod.getSumForPeriod("MM yyyy")} \u20BD"
+                text = stringResource(id = R.string.expenses_for_month, sumForPeriod.getSumForPeriod("MM yyyy"))
             )
         }
     }

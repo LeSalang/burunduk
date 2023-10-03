@@ -2,9 +2,11 @@ package com.lesa.burunduk.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lesa.burunduk.R
 import com.lesa.burunduk.data.expenses.ExpensesRepository
 import com.lesa.burunduk.data.expenses.models.Expense
 import com.lesa.burunduk.data.expenses.models.nameId
+import com.lesa.burunduk.ui.screens.home.expenseTableView.TitlesOfTableView
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -37,7 +39,7 @@ class HomeViewModel(private val expensesRepository: ExpensesRepository): ViewMod
 data class HomeUiState(val expensesList: List<Expense> = listOf())
 
 private fun Expense.toHomeScreen(): HomeScreenExpense {
-    val formatter = DateTimeFormatter.ofPattern("MMM dd", Locale.getDefault())
+    val formatter = DateTimeFormatter.ofPattern("MM.dd", Locale.getDefault())
     val date = date.format(formatter)
     val local = priceRounder(local)
     val rub = ((kopecks) / 100).toString()
@@ -62,10 +64,62 @@ fun HomeUiState.getSumForPeriod(pattern: String): Int {
     return sum
 }
 
-fun HomeUiState.toHomeScreen(): List<HomeScreenExpense> {
-    return expensesList.map {
+fun HomeUiState.toHomeScreen(
+    sortParameter: TitlesOfTableView,
+    sortDirection: Boolean,
+    selectedCategory: Int
+): List<HomeScreenExpense> {
+    val homeScreenExpenseList = expensesList.map {
         it.toHomeScreen()
     }
+    val selectedExpensesList =
+        if (selectedCategory != R.string.category_all) {
+            homeScreenExpenseList.filter {
+                it.category == selectedCategory
+            }
+        } else {
+            homeScreenExpenseList
+    }
+
+    return if (sortDirection) {
+        when (sortParameter) {
+            TitlesOfTableView.DATE -> {
+                selectedExpensesList.sortedByDescending{
+                    it.date
+                }
+            }
+            TitlesOfTableView.CATEGORY-> {
+                selectedExpensesList.sortedByDescending{
+                    it.category
+                }
+            }
+            else -> {
+                selectedExpensesList.sortedByDescending{
+                    it.rub.toInt()
+                }
+            }
+        }
+    } else {
+        when (sortParameter) {
+            TitlesOfTableView.DATE -> {
+                selectedExpensesList.sortedBy{
+                    it.date
+                }
+            }
+            TitlesOfTableView.CATEGORY-> {
+                selectedExpensesList.sortedBy{
+                    it.category
+                }
+            }
+            else -> {
+                selectedExpensesList.sortedBy{
+                    it.rub.toInt()
+                }
+            }
+        }
+    }
+
+
 }
 
 private fun priceRounder(price: Int) : String {

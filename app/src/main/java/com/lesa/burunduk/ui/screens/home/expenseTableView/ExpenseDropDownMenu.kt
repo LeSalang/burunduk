@@ -1,4 +1,4 @@
-package com.lesa.burunduk.ui.screens.home
+package com.lesa.burunduk.ui.screens.home.expenseTableView
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons

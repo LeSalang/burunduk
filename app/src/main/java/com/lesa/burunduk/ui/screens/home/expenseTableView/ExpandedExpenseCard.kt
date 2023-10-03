@@ -1,5 +1,7 @@
-package com.lesa.burunduk.ui.screens.home
+package com.lesa.burunduk.ui.screens.home.expenseTableView
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,6 +27,7 @@ import com.lesa.burunduk.ui.theme.BlackBlue
 import com.lesa.burunduk.ui.theme.Red
 import com.lesa.burunduk.ui.theme.WhiteRed
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExpandedExpenseCard(
     expanded: Boolean,
@@ -45,6 +48,13 @@ fun ExpandedExpenseCard(
             ),
         modifier = Modifier
             .fillMaxWidth()
+            .combinedClickable(
+            onLongClickLabel = "LongClick",
+            onLongClick = {
+                onExpandStateChanged(!expanded)
+            },
+            onClick = {}
+        )
     ) {
         Row(
             Modifier.fillMaxWidth(),

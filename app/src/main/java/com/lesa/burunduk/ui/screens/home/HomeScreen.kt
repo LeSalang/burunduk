@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.lesa.burunduk.ui.AppViewModelProvider
+import com.lesa.burunduk.ui.screens.home.expenseTableView.ExpensesTableView
 import com.lesa.burunduk.ui.theme.WhiteBlue
 
 @Composable
@@ -34,7 +35,7 @@ fun HomeScreen(
         )
         Spacer(modifier = Modifier.size(10.dp))
         ExpensesTableView(
-            homeUiState = homeUiState.toHomeScreen(),
+            homeUiState = homeUiState,
             viewModel = viewModel,
             navController = navController
         )

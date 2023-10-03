@@ -59,7 +59,8 @@ fun MyTextBold(
     modifier: Modifier = Modifier,
     fontSize: TextUnit = 14.sp,
     textAlign: TextAlign = TextAlign.Start,
-    maxLines: Int = 1
+    maxLines: Int = 1,
+    color: Color = BlackBlue
 ) {
     Text(
         text = text,
@@ -67,7 +68,7 @@ fun MyTextBold(
         fontSize = fontSize,
         textAlign = textAlign,
         maxLines = maxLines,
-        color = BlackBlue,
+        color = color,
         fontFamily = burundukFontFamily,
         fontWeight = FontWeight.Bold
     )
