@@ -2,17 +2,21 @@ package com.lesa.burunduk.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import co.yml.charts.common.model.Point
 import com.lesa.burunduk.R
 import com.lesa.burunduk.data.expenses.ExpensesRepository
 import com.lesa.burunduk.data.expenses.models.Expense
 import com.lesa.burunduk.data.expenses.models.nameId
 import com.lesa.burunduk.ui.screens.home.expenseTableView.TitlesOfTableView
+import com.lesa.burunduk.ui.screens.stats.StatsScreenExpense
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 import java.util.UUID
@@ -118,8 +122,6 @@ fun HomeUiState.toHomeScreen(
             }
         }
     }
-
-
 }
 
 private fun priceRounder(price: Int) : String {
@@ -130,4 +132,59 @@ private fun priceRounder(price: Int) : String {
     } else {
         "%.2f".format(rub)
     }
+}
+
+private fun Expense.toStatsScreenExpense(): StatsScreenExpense {
+    val rub = kopecks / 100
+    return StatsScreenExpense(
+        date = date.toLocalDate(),
+        category = category.name,
+        rub = rub
+    )
+}
+
+fun getDaysInMonth(year: Int, month: Int): List<LocalDate> {
+    val yearMonth = YearMonth.of(year, month)
+    val daysInMonth = yearMonth.lengthOfMonth()
+    val daysList = mutableListOf<LocalDate>()
+    for (dayOfMonth in 1..daysInMonth) {
+        val date = LocalDate.of(year, month, dayOfMonth)
+        daysList.add(date)
+    }
+    return daysList
+}
+fun HomeUiState.getMapOfDateToSum(year: Int, month: Int): MutableMap<LocalDate, Int> {
+    val statsExpenseList =  expensesList.map {
+        it.toStatsScreenExpense()
+    }
+    val mapOfDateToSum: MutableMap<LocalDate, Int> = mutableMapOf()
+    val daysInMonth = getDaysInMonth(year, month)
+    daysInMonth.forEach {day ->
+        val sum = statsExpenseList.filter { it.date == day }.sumOf { it.rub }
+        mapOfDateToSum[day] = sum
+    }
+    return mapOfDateToSum
+}
+
+fun HomeUiState.getListOfPoints(year: Int, month: Int): ArrayList<Point> {
+    val list = ArrayList<Point>()
+    val listOfDateToSum = getMapOfDateToSum(year, month)
+    listOfDateToSum.forEach() { (date, sum) ->
+        list.add(
+            Point(
+                x = date.dayOfMonth.toFloat(),
+                y = sum.toFloat()
+            )
+        )
+    }
+    return list
+}
+
+fun HomeUiState.getListOfYears(): List<String> {
+    val years = mutableSetOf<String>()
+    expensesList.forEach { expense ->
+        val year = expense.date.year.toString()
+        years.add(year)
+    }
+    return years.toList()
 }

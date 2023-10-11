@@ -8,14 +8,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.lesa.burunduk.ui.AppViewModelProvider
 import com.lesa.burunduk.ui.components.MyBottomAppBar
 import com.lesa.burunduk.ui.components.MyTopAppBar
 import com.lesa.burunduk.ui.navigation.Home
 import com.lesa.burunduk.ui.navigation.MyNavHost
 import com.lesa.burunduk.ui.navigation.navigateSingleTopTo
 import com.lesa.burunduk.ui.navigation.screens
+import com.lesa.burunduk.ui.screens.home.HomeViewModel
 import com.lesa.burunduk.ui.theme.WhiteBlue
 
 @Preview
@@ -29,6 +32,9 @@ fun MainScreen() {
     val dialogState = remember {
         mutableStateOf(false)
     }
+
+    val viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
+
 
 
     Scaffold(
@@ -51,7 +57,8 @@ fun MainScreen() {
         content = { innerPadding ->
             MyNavHost(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                viewModel = viewModel
             )
         },
         containerColor = WhiteBlue
