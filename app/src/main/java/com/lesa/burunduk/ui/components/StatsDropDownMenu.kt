@@ -6,16 +6,18 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import com.lesa.burunduk.ui.screens.stats.StatsSelectorItem
 import com.lesa.burunduk.ui.theme.BlackBlue
 import com.lesa.burunduk.ui.theme.Red
 import com.lesa.burunduk.ui.theme.WhiteBlue
 
 @Composable
-fun MyDropDownMenu(
+fun <T> StatsDropDownMenu(
     isExpanded: MutableState<Boolean>,
     onDismissRequest: () -> Unit,
-    selectedMenuItem: MutableState<String>,
-    listOfMenuItems: List<String>
+    selectedMenuItem: StatsSelectorItem<T>,
+    onSelect: (StatsSelectorItem<T>) -> Unit,
+    listOfMenuItems: List<StatsSelectorItem<T>>
 ) {
     DropdownMenu(
         expanded = isExpanded.value,
@@ -28,12 +30,12 @@ fun MyDropDownMenu(
             DropdownMenuItem(
                 text = {
                     MyText(
-                        text = it,
+                        text = it.name,
                         color = if (it == selectedMenuItem.value) Red else BlackBlue
                     )
                 },
                 onClick = {
-                    selectedMenuItem.value = it
+                    onSelect(it)
                     isExpanded.value = !isExpanded.value
                 },
                 modifier = Modifier

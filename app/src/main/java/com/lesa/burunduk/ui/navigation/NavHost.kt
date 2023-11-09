@@ -6,17 +6,15 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.lesa.burunduk.ui.screens.PlansScreen
+import com.lesa.burunduk.ui.plans.PlansScreen
 import com.lesa.burunduk.ui.screens.expense.ExpenseEntryScreen
 import com.lesa.burunduk.ui.screens.home.HomeScreen
-import com.lesa.burunduk.ui.screens.home.HomeViewModel
 import com.lesa.burunduk.ui.screens.stats.StatsScreen
 
 @Composable
 fun MyNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier,
-    viewModel: HomeViewModel
+    modifier: Modifier = Modifier
 ) {
     NavHost(
         navController = navController,
@@ -25,17 +23,14 @@ fun MyNavHost(
     ) {
         composable(route = Home.route) {
             HomeScreen(
-                navController = navController,
-                viewModel = viewModel
+                navController = navController
             )
         }
         composable(route = Plans.route) {
             PlansScreen()
         }
         composable(route = Stats.route) {
-            StatsScreen(
-                viewModel = viewModel
-            )
+            StatsScreen()
         }
         composable(route = AddExpense.route) {
             ExpenseEntryScreen(

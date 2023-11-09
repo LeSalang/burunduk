@@ -1,10 +1,8 @@
 package com.lesa.burunduk.ui.screens.stats
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import co.yml.charts.axis.AxisData
@@ -19,27 +17,27 @@ import co.yml.charts.ui.linechart.model.LineStyle
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
-import com.lesa.burunduk.ui.screens.home.HomeUiState
-import com.lesa.burunduk.ui.screens.home.getListOfPoints
 import com.lesa.burunduk.ui.theme.Blue
 import com.lesa.burunduk.ui.theme.Red
 import com.lesa.burunduk.ui.theme.WhiteRed
 import kotlin.math.roundToInt
-private const val steps = 10
+
+class StatsLineChartState(var points: ArrayList<Point>) {
+    val maxY: Float = points.maxOf { it.y }
+}
+
+private const val STEPS = 10
+
 @Composable
-fun MyLineChart(
-    homeUiState: HomeUiState,
-    selectedMonth: MutableState<String>
+fun StatsLineChart(
+    state: StatsLineChartState
 ) {
-    val chosenMonth = Month.valueOf(selectedMonth.value).ordinal
-    Log.d("MyLog", "$chosenMonth")
-    val listOfPoints = homeUiState.getListOfPoints(2023, chosenMonth + 1)
-    val max = getMaxSum(listOfPoints)
+    val max = state.maxY
 
     val xAxisData = AxisData.Builder()
         .axisStepSize(20.dp)
         .backgroundColor(WhiteRed)
-        .steps(listOfPoints.size - 1)
+        .steps(state.points.size - 1)
         .labelData { i ->
             (i + 1).toString()
         }
@@ -47,21 +45,21 @@ fun MyLineChart(
         .build()
 
     val yAxisData = AxisData.Builder()
-        .steps(steps)
+        .steps(STEPS)
         .backgroundColor(WhiteRed)
         .labelAndAxisLinePadding(15.dp)
         .labelData { i ->
-            val yScale = (max / steps).roundToInt()
-            (i * yScale).toString() + " \u20BD"
+            val yScale = (max / STEPS)
+            (i * yScale).roundToInt().toString() + " \u20BD"
         }.build()
 
     val lineChartData = LineChartData(
         linePlotData = LinePlotData(
             lines = listOf(
                 Line(
-                    dataPoints = listOfPoints,
+                    dataPoints = state.points,
                     LineStyle(color = Red, width = 5f),
-                    IntersectionPoint(radius = 4.dp),
+                    IntersectionPoint(radius = 3.dp),
                     SelectionHighlightPoint(),
                     ShadowUnderLine(color = Blue),
                     SelectionHighlightPopUp()
@@ -73,6 +71,9 @@ fun MyLineChart(
         gridLines = GridLines(),
         backgroundColor = WhiteRed
     )
+   /* if (state.points.isEmpty())
+        Text(text = "list is empty")
+    else*/
     LineChart(
         modifier = Modifier
             .fillMaxWidth()
@@ -81,10 +82,3 @@ fun MyLineChart(
     )
 }
 
-private fun getMaxSum(list: ArrayList<Point>): Float {
-    var max = 0f
-    list.forEach {
-        if (max < it.y) max = it.y
-    }
-    return max
-}

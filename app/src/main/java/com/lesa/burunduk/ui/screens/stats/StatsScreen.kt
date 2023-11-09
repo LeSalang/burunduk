@@ -1,6 +1,5 @@
 package com.lesa.burunduk.ui.screens.stats
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,30 +18,28 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.lesa.burunduk.ui.screens.home.HomeViewModel
-import com.lesa.burunduk.ui.screens.home.getListOfYears
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.lesa.burunduk.ui.AppViewModelProvider
 import com.lesa.burunduk.ui.theme.WhiteBlue
 import com.lesa.burunduk.ui.theme.WhiteRed
-import java.time.YearMonth
 
 @Composable
 fun StatsScreen(
-    viewModel: HomeViewModel
+    viewModel: StatsViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
-    val homeUiState by viewModel.homeUiState.collectAsState()
-    val currentDate = YearMonth.now()
-    val currentMonth = currentDate.month.name
-    val currentYear = currentDate.year.toString()
-
-    Log.d("MyLog", currentMonth)
-
+    val statsUiState by viewModel.statsUiState.collectAsState()
+    val listOfYears = statsUiState.getListOfYears().map {
+        StatsSelectorItem(
+            value = it,
+            name = it.toString()
+        )
+    }
+    val statsSelectorItemYear = remember {
+        mutableStateOf(listOfYears.last())
+    }
     val isMonthMenuExpanded = remember { mutableStateOf(false) }
-    val listOfMonths = Month.values().map { it.name }
-    val selectedMonth = remember { mutableStateOf(currentMonth) }
-
     val isYearMenuExpanded = remember { mutableStateOf(false) }
-    val listOfYears = homeUiState.getListOfYears()
-    val selectedYear = remember { mutableStateOf(currentYear) }
+    val listOfMonths = java.time.Month.values().map { it.toStatsSelectorItem() }
 
     Column(
         androidx.compose.ui.Modifier
@@ -71,26 +68,48 @@ fun StatsScreen(
                         StatsSelector(
                             modifier = Modifier,
                             isExpanded = isMonthMenuExpanded,
-                            selectedMenuItem = selectedMonth,
-                            listOfMenuItems = listOfMonths
+                            selectedMenuItem = statsUiState.month.value.toStatsSelectorItem(),
+                            listOfMenuItems = listOfMonths,
+                            onSelect = {
+                                viewModel.selectMonth(it.value)
+                                //statsUiState.month.value = it.value
+                            }
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                         StatsSelector(
                             modifier = Modifier,
                             isExpanded = isYearMenuExpanded,
-                            selectedMenuItem = selectedYear,
-                            listOfMenuItems = listOfYears
+                            selectedMenuItem = statsUiState.year.value.toStatsSelectorItem(),
+                            listOfMenuItems = listOfYears,
+                            onSelect = {
+                                viewModel.selectYear(it.value)
+                                //statsUiState.year.value = it.value
+                            }
                         )
                     }
-                    MyLineChart(
-                        homeUiState = homeUiState,
-                        selectedMonth = selectedMonth
+                    StatsLineChart(
+                        state = statsUiState.lineChartState
                     )
                 }
             }
         }
     }
 }
+
+private fun java.time.Month.toStatsSelectorItem(): StatsSelectorItem<java.time.Month> {
+    return StatsSelectorItem(
+        value = this,
+        name = name
+    )
+}
+
+private fun java.time.Year.toStatsSelectorItem(): StatsSelectorItem<java.time.Year> {
+    return StatsSelectorItem(
+        value = this,
+        name = value.toString()
+    )
+}
+
 
 
 

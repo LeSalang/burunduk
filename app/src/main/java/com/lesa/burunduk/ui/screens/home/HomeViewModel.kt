@@ -2,22 +2,19 @@ package com.lesa.burunduk.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import co.yml.charts.common.model.Point
 import com.lesa.burunduk.R
 import com.lesa.burunduk.data.expenses.ExpensesRepository
 import com.lesa.burunduk.data.expenses.models.Expense
 import com.lesa.burunduk.data.expenses.models.nameId
-import com.lesa.burunduk.ui.screens.home.expenseTableView.TitlesOfTableView
-import com.lesa.burunduk.ui.screens.stats.StatsScreenExpense
+import com.lesa.burunduk.ui.screens.home.expenseTableView.ExpenseSortSelector
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import java.util.Locale
 import java.util.UUID
 
@@ -43,7 +40,7 @@ class HomeViewModel(private val expensesRepository: ExpensesRepository): ViewMod
 data class HomeUiState(val expensesList: List<Expense> = listOf())
 
 private fun Expense.toHomeScreen(): HomeScreenExpense {
-    val formatter = DateTimeFormatter.ofPattern("MM.dd", Locale.getDefault())
+    val formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT)
     val date = date.format(formatter)
     val local = priceRounder(local)
     val rub = ((kopecks) / 100).toString()
@@ -69,62 +66,61 @@ fun HomeUiState.getSumForPeriod(pattern: String): Int {
 }
 
 fun HomeUiState.toHomeScreen(
-    sortParameter: TitlesOfTableView,
+    sortParameter: ExpenseSortSelector,
     sortDirection: Boolean,
-    selectedCategory: Int
+    selectedCategory: Int,
 ): List<HomeScreenExpense> {
-    val homeScreenExpenseList = expensesList.map {
-        it.toHomeScreen()
-    }
-    val selectedExpensesList =
-        if (selectedCategory != R.string.category_all) {
-            homeScreenExpenseList.filter {
-                it.category == selectedCategory
-            }
-        } else {
-            homeScreenExpenseList
-    }
-
-    return if (sortDirection) {
-        when (sortParameter) {
-            TitlesOfTableView.DATE -> {
-                selectedExpensesList.sortedByDescending{
-                    it.date
-                }
-            }
-            TitlesOfTableView.CATEGORY-> {
-                selectedExpensesList.sortedByDescending{
-                    it.category
-                }
-            }
-            else -> {
-                selectedExpensesList.sortedByDescending{
-                    it.rub.toInt()
-                }
+    val result = expensesList
+        .filter {
+            if (selectedCategory != R.string.category_all) {
+                it.category.nameId == selectedCategory
+            } else {
+                true
             }
         }
+        .sortedExpenses(sortParameter, sortDirection)
+        .map {
+            it.toHomeScreen()
+        }
+    return result
+}
+
+private fun List<Expense>.sortedExpenses(
+    selector: ExpenseSortSelector,
+    byDescending: Boolean
+): List<Expense> {
+    return if (byDescending) {
+        when (selector) {
+            ExpenseSortSelector.DATE -> {
+                sortedByDescending { it.date }
+            }
+            ExpenseSortSelector.CATEGORY-> {
+                sortedByDescending { it.category }
+            }
+            ExpenseSortSelector.RUB -> {
+                sortedByDescending { it.kopecks }
+            }
+            else -> this
+        }
     } else {
-        when (sortParameter) {
-            TitlesOfTableView.DATE -> {
-                selectedExpensesList.sortedBy{
-                    it.date
-                }
+        when (selector) {
+            ExpenseSortSelector.DATE -> {
+                sortedBy { it.date }
             }
-            TitlesOfTableView.CATEGORY-> {
-                selectedExpensesList.sortedBy{
-                    it.category
-                }
+            ExpenseSortSelector.CATEGORY-> {
+                sortedBy { it.category }
             }
-            else -> {
-                selectedExpensesList.sortedBy{
-                    it.rub.toInt()
-                }
+            ExpenseSortSelector.RUB -> {
+                sortedBy { it.kopecks }
             }
+            else -> this
         }
     }
 }
 
-private fun priceRounder(price: Int) : String {
+
+
+private fun priceRounder(price: Int): String {
     val rub: Float = price.toFloat() / 100f
     val kopecks = rub - rub.toInt()
     return if (kopecks == 0f) {
@@ -132,59 +128,4 @@ private fun priceRounder(price: Int) : String {
     } else {
         "%.2f".format(rub)
     }
-}
-
-private fun Expense.toStatsScreenExpense(): StatsScreenExpense {
-    val rub = kopecks / 100
-    return StatsScreenExpense(
-        date = date.toLocalDate(),
-        category = category.name,
-        rub = rub
-    )
-}
-
-fun getDaysInMonth(year: Int, month: Int): List<LocalDate> {
-    val yearMonth = YearMonth.of(year, month)
-    val daysInMonth = yearMonth.lengthOfMonth()
-    val daysList = mutableListOf<LocalDate>()
-    for (dayOfMonth in 1..daysInMonth) {
-        val date = LocalDate.of(year, month, dayOfMonth)
-        daysList.add(date)
-    }
-    return daysList
-}
-fun HomeUiState.getMapOfDateToSum(year: Int, month: Int): MutableMap<LocalDate, Int> {
-    val statsExpenseList =  expensesList.map {
-        it.toStatsScreenExpense()
-    }
-    val mapOfDateToSum: MutableMap<LocalDate, Int> = mutableMapOf()
-    val daysInMonth = getDaysInMonth(year, month)
-    daysInMonth.forEach {day ->
-        val sum = statsExpenseList.filter { it.date == day }.sumOf { it.rub }
-        mapOfDateToSum[day] = sum
-    }
-    return mapOfDateToSum
-}
-
-fun HomeUiState.getListOfPoints(year: Int, month: Int): ArrayList<Point> {
-    val list = ArrayList<Point>()
-    val listOfDateToSum = getMapOfDateToSum(year, month)
-    listOfDateToSum.forEach() { (date, sum) ->
-        list.add(
-            Point(
-                x = date.dayOfMonth.toFloat(),
-                y = sum.toFloat()
-            )
-        )
-    }
-    return list
-}
-
-fun HomeUiState.getListOfYears(): List<String> {
-    val years = mutableSetOf<String>()
-    expensesList.forEach { expense ->
-        val year = expense.date.year.toString()
-        years.add(year)
-    }
-    return years.toList()
 }

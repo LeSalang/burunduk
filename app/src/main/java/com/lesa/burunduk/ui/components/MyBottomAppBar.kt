@@ -43,7 +43,11 @@ fun MyBottomAppBar(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    onButtonSelected(AddExpense)
+                    if (currentScreen == AddExpense) {
+                        onButtonSelected(AddExpense)
+                    } else {
+                        onButtonSelected(AddExpense)
+                    }
                 },
                 containerColor = BlackBlue,
                 contentColor = Red

@@ -10,13 +10,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.lesa.burunduk.ui.AppViewModelProvider
 import com.lesa.burunduk.ui.screens.home.expenseTableView.ExpensesTableView
 import com.lesa.burunduk.ui.theme.WhiteBlue
 
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel/* = viewModel(factory = AppViewModelProvider.Factory)*/,
+    viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory),
     navController: NavController
 ) {
     val homeUiState by viewModel.homeUiState.collectAsState()

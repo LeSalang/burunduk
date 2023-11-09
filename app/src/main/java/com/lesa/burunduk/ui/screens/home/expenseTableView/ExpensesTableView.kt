@@ -48,7 +48,7 @@ fun ExpensesTableView(
     navController: NavController
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val sortParameter = rememberSaveable { mutableStateOf(TitlesOfTableView.DATE) }
+    val sortParameter = rememberSaveable { mutableStateOf(ExpenseSortSelector.DATE) }
     val sortDirection = rememberSaveable { mutableStateOf(true) }
     val isCategoryMenuDropDown = remember { mutableStateOf(false) }
     val selectedCategory = rememberSaveable { mutableIntStateOf(R.string.category_all) }
@@ -68,12 +68,12 @@ fun ExpensesTableView(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 MyTextBold(
-                    text = stringResource(TitlesOfTableView.DATE.title),
-                    color = if (sortParameter.value == TitlesOfTableView.DATE) Red else BlackBlue,
+                    text = stringResource(ExpenseSortSelector.DATE.title),
+                    color = if (sortParameter.value == ExpenseSortSelector.DATE) Red else BlackBlue,
                     modifier = Modifier
                         .weight(1.5f)
                         .clickable {
-                            sortParameter.value = TitlesOfTableView.DATE
+                            sortParameter.value = ExpenseSortSelector.DATE
                             sortDirection.value = !sortDirection.value
                         }
                 )
@@ -83,19 +83,19 @@ fun ExpensesTableView(
                         .weight(2.5f)
                 ) {
                     MyTextBold(
-                        text = stringResource(TitlesOfTableView.CATEGORY.title),
-                        color = if (sortParameter.value == TitlesOfTableView.CATEGORY) Red else BlackBlue,
+                        text = stringResource(ExpenseSortSelector.CATEGORY.title),
+                        color = if (sortParameter.value == ExpenseSortSelector.CATEGORY) Red else BlackBlue,
                         modifier = Modifier
                            // .weight(2.5f)
                             .clickable {
-                                sortParameter.value = TitlesOfTableView.CATEGORY
+                                sortParameter.value = ExpenseSortSelector.CATEGORY
                                 sortDirection.value = !sortDirection.value
                             }
                     )
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "",
-                        tint = if (sortParameter.value == TitlesOfTableView.CATEGORY) Red else BlackBlue,
+                        tint = if (sortParameter.value == ExpenseSortSelector.CATEGORY) Red else BlackBlue,
                         modifier = Modifier
                             .clickable {
                                 isCategoryMenuDropDown.value = !isCategoryMenuDropDown.value
@@ -118,12 +118,12 @@ fun ExpensesTableView(
                 )
                 Spacer(modifier = Modifier.weight(0.1f))
                 MyTextBold(
-                    text = stringResource(TitlesOfTableView.RUB.title),
-                    color = if (sortParameter.value == TitlesOfTableView.RUB) Red else BlackBlue,
+                    text = stringResource(ExpenseSortSelector.RUB.title),
+                    color = if (sortParameter.value == ExpenseSortSelector.RUB) Red else BlackBlue,
                     modifier = Modifier
                         .weight(2f)
                         .clickable {
-                            sortParameter.value = TitlesOfTableView.RUB
+                            sortParameter.value = ExpenseSortSelector.RUB
                             sortDirection.value = !sortDirection.value
                         }
                     ,
@@ -198,7 +198,7 @@ fun ExpenseCard(
     }
 }
 
-enum class TitlesOfTableView(val title: Int) {
+enum class ExpenseSortSelector(val title: Int) {
     DATE(R.string.date),
     CATEGORY(R.string.category),
     LOCAL(R.string.local),

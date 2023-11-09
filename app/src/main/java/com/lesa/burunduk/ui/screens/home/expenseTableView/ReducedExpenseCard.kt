@@ -36,7 +36,7 @@ fun ReducedExpenseCard(
     ) {
         MyText(
             text = date,
-            Modifier.weight(1.5f)
+            Modifier.weight(1.6f)
         )
         Spacer(modifier = Modifier.weight(0.1f))
         MyText(

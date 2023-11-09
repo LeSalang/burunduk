@@ -1,4 +1,4 @@
-package com.lesa.burunduk.ui.screens
+package com.lesa.burunduk.ui.plans
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

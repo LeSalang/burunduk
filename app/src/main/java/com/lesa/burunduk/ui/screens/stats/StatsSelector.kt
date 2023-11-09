@@ -8,46 +8,50 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import com.lesa.burunduk.ui.components.MyDropDownMenu
 import com.lesa.burunduk.ui.components.MyTextBold
+import com.lesa.burunduk.ui.components.StatsDropDownMenu
 import com.lesa.burunduk.ui.theme.BlackBlue
 
+class StatsSelectorItem<T>(
+    val value: T,
+    val name: String
+) {
+
+}
 @Composable
-fun StatsSelector(
+fun <T> StatsSelector(
     modifier: Modifier = Modifier,
     isExpanded: MutableState<Boolean>,
-    selectedMenuItem: MutableState<String>,
-    listOfMenuItems: List<String>
+    selectedMenuItem: StatsSelectorItem<T>,
+    onSelect: (StatsSelectorItem<T>) -> Unit,
+    listOfMenuItems: List<StatsSelectorItem<T>>
 ) {
     Row(
         modifier = modifier
+            .clickable {
+                isExpanded.value = !isExpanded.value
+            }
     ) {
         MyTextBold(
-            text = selectedMenuItem.value,
+            text = selectedMenuItem.name,
             color = BlackBlue,
             modifier = Modifier
-                // .weight(2.5f)
-                .clickable {
-                    isExpanded.value = !isExpanded.value
-                }
         )
         Icon(
             imageVector = Icons.Default.ArrowDropDown,
             contentDescription = "",
             tint = BlackBlue,
             modifier = Modifier
-                .clickable {
-                    isExpanded.value = !isExpanded.value
-                }
         )
-        MyDropDownMenu(
+        StatsDropDownMenu(
             isExpanded = isExpanded,
             onDismissRequest = {
                 isExpanded.value = !isExpanded.value
             },
             selectedMenuItem = selectedMenuItem,
-            listOfMenuItems = listOfMenuItems
-            )
+            listOfMenuItems = listOfMenuItems,
+            onSelect = onSelect
+        )
     }
 }
 
