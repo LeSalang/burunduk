@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -16,6 +18,7 @@ import com.lesa.burunduk.ui.navigation.navigateSingleTopTo
 import com.lesa.burunduk.ui.navigation.screens
 import com.lesa.burunduk.ui.theme.WhiteBlue
 
+typealias FABConfigurator = () -> Unit
 @Preview
 @Composable
 fun MainScreen() {
@@ -24,6 +27,7 @@ fun MainScreen() {
     val currentDestination = currentBackStack?.destination
     var currentScreen =
        screens.find { it.route == currentDestination?.route } ?: Home
+    val (fabOnClick, setFabOnClick) = remember { mutableStateOf<FABConfigurator?>(null) }
     Scaffold(
         topBar = {
             MyTopAppBar(
@@ -38,12 +42,14 @@ fun MainScreen() {
                     currentScreen = newScreen
                 },
                 currentScreen = currentScreen,
+                fabConfigurator = fabOnClick
             )
         },
         content = { innerPadding ->
             MyNavHost(
                 navController = navController,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                setFABConfigurator = setFabOnClick
             )
         },
         containerColor = WhiteBlue

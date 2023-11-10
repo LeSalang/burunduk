@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.lesa.burunduk.ui.plans.PlansScreen
+import com.lesa.burunduk.ui.screens.FABConfigurator
 import com.lesa.burunduk.ui.screens.expense.ExpenseEntryScreen
 import com.lesa.burunduk.ui.screens.home.HomeScreen
 import com.lesa.burunduk.ui.screens.stats.StatsScreen
@@ -14,7 +15,8 @@ import com.lesa.burunduk.ui.screens.stats.StatsScreen
 @Composable
 fun MyNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    setFABConfigurator: ((FABConfigurator?) -> Unit)
 ) {
     NavHost(
         navController = navController,
@@ -36,7 +38,8 @@ fun MyNavHost(
             ExpenseEntryScreen(
                 navigateBack = {
                     navController.navigateUp()
-                }
+                },
+                setFABConfigurator = setFABConfigurator
             )
         }
     }

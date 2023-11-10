@@ -4,6 +4,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import co.yml.charts.common.extensions.isNotNull
 import com.lesa.burunduk.data.expenses.ExpensesRepository
 import com.lesa.burunduk.data.expenses.models.Category
 import com.lesa.burunduk.data.expenses.models.Expense
@@ -16,13 +17,13 @@ class ExpenseEntryViewModel(private val expensesRepository: ExpensesRepository):
     var expenseUiState by mutableStateOf(ExpenseUiState())
         private set
 
-    private fun validateInput(expenseDetails: ExpenseDetails = expenseUiState.expenseDetails): Boolean {
-        return expenseDetails.toExpense() != null
+    fun validateInput() {
+        expenseUiState.validationResult = expenseUiState.expenseDetails.validate()
     }
 
     fun updateUiState(expenseDetails: ExpenseDetails) {
         expenseUiState =
-            ExpenseUiState(expenseDetails = expenseDetails, isEntryValid = validateInput(expenseDetails))
+            ExpenseUiState(expenseDetails = expenseDetails)
     }
 
     suspend fun saveExpense() {
@@ -32,7 +33,7 @@ class ExpenseEntryViewModel(private val expensesRepository: ExpensesRepository):
 
 data class ExpenseUiState(
     val expenseDetails: ExpenseDetails = ExpenseDetails(),
-    val isEntryValid: Boolean = false
+    var validationResult: ExpenseValidationResult = ExpenseValidationResult()
 )
 
 data class ExpenseDetails(
@@ -40,6 +41,25 @@ data class ExpenseDetails(
     val local: String = "",
     val exchangeRate: String = "",
 )
+
+data class ExpenseValidationResult(
+    val isCategoryValid: Boolean? = null,
+    val isLocalValid: Boolean? = null,
+    val isExchangeRateValid: Boolean? = null
+)
+
+val ExpenseValidationResult.isValid: Boolean
+    get() {
+       return isCategoryValid == true && isLocalValid == true && isExchangeRateValid == true
+    }
+
+fun ExpenseDetails.validate(): ExpenseValidationResult {
+    return ExpenseValidationResult(
+        isCategoryValid = category.isNotNull(),
+        isLocalValid = (local.toDoubleOrNull() ?: 0.0) > 0.0,
+        isExchangeRateValid = (exchangeRate.toDoubleOrNull() ?: 0.0) > 0.0
+    )
+}
 
 fun ExpenseDetails.toExpense(): Expense? {
     if (category == null) return null

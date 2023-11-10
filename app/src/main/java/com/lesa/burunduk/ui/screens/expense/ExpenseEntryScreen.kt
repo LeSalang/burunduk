@@ -12,15 +12,14 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -35,12 +34,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import com.lesa.burunduk.R
 import com.lesa.burunduk.data.expenses.models.Category
 import com.lesa.burunduk.data.expenses.models.nameId
 import com.lesa.burunduk.ui.AppViewModelProvider
 import com.lesa.burunduk.ui.components.MyText
+import com.lesa.burunduk.ui.screens.FABConfigurator
 import com.lesa.burunduk.ui.screens.home.HomeScreenExpense
 import com.lesa.burunduk.ui.theme.BlackBlue
 import com.lesa.burunduk.ui.theme.Red
@@ -52,9 +51,24 @@ import kotlinx.coroutines.launch
 fun ExpenseEntryScreen(
     viewModel: ExpenseEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
     expense: HomeScreenExpense? = null,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    setFABConfigurator: ((FABConfigurator?) -> Unit)
 ) {
     val coroutineScope = rememberCoroutineScope()
+    setFABConfigurator.invoke {
+        coroutineScope.launch {
+            viewModel.validateInput()
+            if (viewModel.expenseUiState.validationResult.isValid) {
+                viewModel.saveExpense()
+                navigateBack()
+            }
+        }
+    }
+   DisposableEffect(Unit) {
+       onDispose {
+           setFABConfigurator(null)
+       }
+   }
     Column (
         Modifier
             .padding(
@@ -65,28 +79,15 @@ fun ExpenseEntryScreen(
     ){
         ExpenseInputForm(
             expenseDetails = viewModel.expenseUiState.expenseDetails,
-            onValueChange = viewModel :: updateUiState,
-            expense = expense
+            onValueChange = viewModel :: updateUiState
         )
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    viewModel.saveExpense()
-                    navigateBack()
-                }
-            },
-            enabled = viewModel.expenseUiState.isEntryValid
-        ) {
-            Text(text = "Save data")
-        }
     }
 }
 
 @Composable
-fun ExpenseInputForm(
+private fun ExpenseInputForm(
     expenseDetails: ExpenseDetails,
-    onValueChange: (ExpenseDetails) -> Unit = {},
-    expense: HomeScreenExpense?
+    onValueChange: (ExpenseDetails) -> Unit = {}
 ) {
     Spacer(modifier = Modifier.size(10.dp))
     Card(
@@ -100,22 +101,19 @@ fun ExpenseInputForm(
             SelectCatRadioButtons(
                 expenseDetails = expenseDetails,
                 onValueChange = onValueChange,
-                expense = expense
             )
             ExpenseTextField(
                 expenseDetails = expenseDetails,
-                onValueChange = onValueChange,
-                expense = expense
+                onValueChange = onValueChange
             )
         }
     }
 }
 
 @Composable
-fun ExpenseTextField(
+private fun ExpenseTextField(
     expenseDetails: ExpenseDetails,
-    onValueChange: (ExpenseDetails) -> Unit = {},
-    expense: HomeScreenExpense?
+    onValueChange: (ExpenseDetails) -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -127,7 +125,7 @@ fun ExpenseTextField(
         )
         Spacer(modifier = Modifier.weight(0.1f))
         TextField(
-            value = expense?.date?:expenseDetails.local,
+            value = expenseDetails.local,
             onValueChange = {
                 onValueChange(expenseDetails.copy(local = it))
             },
@@ -186,15 +184,13 @@ fun ExpenseTextField(
 }
 
 @Composable
-fun SelectCatRadioButtons(
+private fun SelectCatRadioButtons(
     expenseDetails: ExpenseDetails,
     onValueChange: (ExpenseDetails) -> Unit = {},
-    expense: HomeScreenExpense?
 ) {
-    val dBCategoryList = Category.values()
+    val allCategories = Category.values()
     val (selectedOption, onOptionSelected) = remember {
-        mutableStateOf(
-            expense?.category?:dBCategoryList[dBCategoryList.lastIndex] )
+        mutableStateOf(expenseDetails.category)
     }
     Column(
         modifier = Modifier.padding( 8.dp)
@@ -204,26 +200,25 @@ fun SelectCatRadioButtons(
         LazyVerticalGrid(
             columns = GridCells.Fixed(2)
         ) {
-            items(dBCategoryList) { category ->
+            items(allCategories) { category ->
+                val isSelected = category == selectedOption
+                val onClick = {
+                    onValueChange(expenseDetails.copy(category = category))
+                    onOptionSelected(category)
+                }
                 Row(
                     Modifier
                         .fillMaxWidth()
                         .selectable(
-                            selected = (category == expenseDetails.category),
-                            onClick = {
-                                onValueChange(expenseDetails.copy(category = category))
-                                onOptionSelected(category)
-                            }
+                            selected = isSelected,
+                            onClick = onClick
                         )
                         .padding(horizontal = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     RadioButton(
-                        selected = (category == expenseDetails.category),
-                        onClick = {
-                            onValueChange(expenseDetails.copy(category = category))
-                            onOptionSelected(category)
-                        },
+                        selected = isSelected,
+                        onClick = onClick,
                         colors = RadioButtonDefaults.colors(
                             selectedColor = Red,
                             unselectedColor = BlackBlue
@@ -235,7 +230,8 @@ fun SelectCatRadioButtons(
                         text = stringResource(id = category.nameId),
                         textAlign = TextAlign.Start,
                         modifier = Modifier.padding(start = 4.dp),
-                        maxLines = 1)
+                        maxLines = 1
+                    )
                 }
             }
         }

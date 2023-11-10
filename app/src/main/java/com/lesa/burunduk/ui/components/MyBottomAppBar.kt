@@ -10,18 +10,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import com.lesa.burunduk.ui.navigation.AddExpense
 import com.lesa.burunduk.ui.navigation.Destinations
+import com.lesa.burunduk.ui.screens.FABConfigurator
 import com.lesa.burunduk.ui.theme.BlackBlue
 import com.lesa.burunduk.ui.theme.Red
 import com.lesa.burunduk.ui.theme.WhiteBlue
+
+
 
 @Composable
 fun MyBottomAppBar(
     allScreens: List<Destinations>,
     onButtonSelected: (Destinations) -> Unit,
     currentScreen: Destinations,
+    fabConfigurator: FABConfigurator?
 ) {
+
     BottomAppBar(
         actions = {
             allScreens.dropLast(1).forEach { screen ->
@@ -42,15 +48,10 @@ fun MyBottomAppBar(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    if (currentScreen == AddExpense) {
-                        onButtonSelected(AddExpense)
-                    } else {
-                        onButtonSelected(AddExpense)
-                    }
-                },
+                onClick = fabConfigurator ?: { onButtonSelected(AddExpense) },
                 containerColor = BlackBlue,
-                contentColor = Red
+                contentColor = Red,
+                modifier = Modifier
             ) {
                 Icon(
                     imageVector = if (currentScreen == AddExpense) Icons.Default.Done else Icons.Default.Add,
