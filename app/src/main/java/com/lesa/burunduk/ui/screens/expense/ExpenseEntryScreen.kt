@@ -32,7 +32,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lesa.burunduk.R
 import com.lesa.burunduk.data.expenses.models.Category
@@ -40,17 +39,12 @@ import com.lesa.burunduk.data.expenses.models.nameId
 import com.lesa.burunduk.ui.AppViewModelProvider
 import com.lesa.burunduk.ui.components.MyText
 import com.lesa.burunduk.ui.screens.FABConfigurator
-import com.lesa.burunduk.ui.screens.home.HomeScreenExpense
-import com.lesa.burunduk.ui.theme.BlackBlue
-import com.lesa.burunduk.ui.theme.Red
-import com.lesa.burunduk.ui.theme.WhiteBlue
-import com.lesa.burunduk.ui.theme.WhiteRed
+import com.lesa.burunduk.ui.theme.LeSaTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun ExpenseEntryScreen(
     viewModel: ExpenseEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
-    expense: HomeScreenExpense? = null,
     navigateBack: () -> Unit,
     setFABConfigurator: ((FABConfigurator?) -> Unit)
 ) {
@@ -75,7 +69,7 @@ fun ExpenseEntryScreen(
                 start = 10.dp,
                 end = 10.dp
             )
-            .background(WhiteBlue)
+            .background(LeSaTheme.colors.background80)
     ){
         ExpenseInputForm(
             expenseDetails = viewModel.expenseUiState.expenseDetails,
@@ -91,7 +85,7 @@ private fun ExpenseInputForm(
 ) {
     Spacer(modifier = Modifier.size(10.dp))
     Card(
-        colors = CardDefaults.cardColors(containerColor = WhiteRed),
+        colors = CardDefaults.cardColors(containerColor = LeSaTheme.colors.background80),
         modifier = Modifier
             .fillMaxWidth()
     ) {
@@ -136,13 +130,13 @@ private fun ExpenseTextField(
             modifier = Modifier
                 .weight(0.5f),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = WhiteBlue,
-                unfocusedContainerColor = WhiteBlue,
-                unfocusedIndicatorColor = WhiteBlue
+                focusedContainerColor = LeSaTheme.colors.background90,
+                unfocusedContainerColor = LeSaTheme.colors.background90,
+                unfocusedIndicatorColor = LeSaTheme.colors.background90
             ),
             textStyle = TextStyle(
-                color = Red,
-                fontSize = 20.sp,
+                color = LeSaTheme.colors.primary,
+                fontSize = LeSaTheme.typography.hat.fontSize,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             )
@@ -166,16 +160,17 @@ private fun ExpenseTextField(
                 keyboardType = KeyboardType.Number,
                 imeAction = ImeAction.Done
             ),
+            singleLine = true,
             modifier = Modifier
                 .weight(0.5f),
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = WhiteBlue,
-                unfocusedContainerColor = WhiteBlue,
-                unfocusedIndicatorColor = WhiteBlue
+                focusedContainerColor = LeSaTheme.colors.background90,
+                unfocusedContainerColor = LeSaTheme.colors.background90,
+                unfocusedIndicatorColor = LeSaTheme.colors.background90
             ),
             textStyle = TextStyle(
-                color = Red,
-                fontSize = 20.sp,
+                color = LeSaTheme.colors.primary,
+                fontSize = LeSaTheme.typography.hat.fontSize,
                 textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold
             )
@@ -220,8 +215,8 @@ private fun SelectCatRadioButtons(
                         selected = isSelected,
                         onClick = onClick,
                         colors = RadioButtonDefaults.colors(
-                            selectedColor = Red,
-                            unselectedColor = BlackBlue
+                            selectedColor = LeSaTheme.colors.primary,
+                            unselectedColor = LeSaTheme.colors.text
                         ),
                         modifier = Modifier
                             .size(40.dp)
@@ -229,7 +224,7 @@ private fun SelectCatRadioButtons(
                     MyText(
                         text = stringResource(id = category.nameId),
                         textAlign = TextAlign.Start,
-                        modifier = Modifier.padding(start = 4.dp),
+                        modifier = Modifier.padding(start = LeSaTheme.shape.padding),
                         maxLines = 1
                     )
                 }

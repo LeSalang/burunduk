@@ -7,9 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import com.lesa.burunduk.ui.screens.stats.StatsSelectorItem
-import com.lesa.burunduk.ui.theme.BlackBlue
-import com.lesa.burunduk.ui.theme.Red
-import com.lesa.burunduk.ui.theme.WhiteBlue
+import com.lesa.burunduk.ui.theme.LeSaTheme
 
 @Composable
 fun <T> StatsDropDownMenu(
@@ -24,14 +22,14 @@ fun <T> StatsDropDownMenu(
         onDismissRequest = onDismissRequest,
         modifier = Modifier
 //            .size(200.dp, 400.dp)
-            .background(WhiteBlue)
+            .background(LeSaTheme.colors.background90)
     ) {
         listOfMenuItems.forEach {
             DropdownMenuItem(
                 text = {
                     MyText(
                         text = it.name,
-                        color = if (it == selectedMenuItem.value) Red else BlackBlue
+                        color = if (it == selectedMenuItem.value) LeSaTheme.colors.primary else LeSaTheme.colors.text
                     )
                 },
                 onClick = {

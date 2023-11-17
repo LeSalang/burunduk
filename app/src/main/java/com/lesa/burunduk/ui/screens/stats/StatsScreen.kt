@@ -20,8 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lesa.burunduk.ui.AppViewModelProvider
-import com.lesa.burunduk.ui.theme.WhiteBlue
-import com.lesa.burunduk.ui.theme.WhiteRed
+import com.lesa.burunduk.ui.theme.LeSaTheme
 
 @Composable
 fun StatsScreen(
@@ -34,23 +33,20 @@ fun StatsScreen(
             name = it.toString()
         )
     }
-    val statsSelectorItemYear = remember {
-        mutableStateOf(listOfYears.last())
-    }
     val isMonthMenuExpanded = remember { mutableStateOf(false) }
     val isYearMenuExpanded = remember { mutableStateOf(false) }
     val listOfMonths = java.time.Month.values().map { it.toStatsSelectorItem() }
 
     Column(
-        androidx.compose.ui.Modifier
+        Modifier
             .padding(
                 start = 10.dp,
                 end = 10.dp
             )
-            .background(WhiteBlue)
+            .background(LeSaTheme.colors.background80)
     ) {
         Card(
-            colors = CardDefaults.cardColors(containerColor = WhiteRed),
+            colors = CardDefaults.cardColors(containerColor = LeSaTheme.colors.background80),
             modifier = Modifier
                 .fillMaxWidth()
         ) {

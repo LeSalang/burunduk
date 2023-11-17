@@ -35,10 +35,7 @@ import com.lesa.burunduk.ui.components.MyTextBold
 import com.lesa.burunduk.ui.screens.home.HomeUiState
 import com.lesa.burunduk.ui.screens.home.HomeViewModel
 import com.lesa.burunduk.ui.screens.home.toHomeScreen
-import com.lesa.burunduk.ui.theme.BlackBlue
-import com.lesa.burunduk.ui.theme.Red
-import com.lesa.burunduk.ui.theme.WhiteBlue
-import com.lesa.burunduk.ui.theme.WhiteRed
+import com.lesa.burunduk.ui.theme.LeSaTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -53,7 +50,7 @@ fun ExpensesTableView(
     val isCategoryMenuDropDown = remember { mutableStateOf(false) }
     val selectedCategory = rememberSaveable { mutableIntStateOf(R.string.category_all) }
     Card(
-        colors = CardDefaults.cardColors(containerColor = WhiteRed),
+        colors = CardDefaults.cardColors(containerColor = LeSaTheme.colors.background80),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +66,9 @@ fun ExpensesTableView(
             ) {
                 MyTextBold(
                     text = stringResource(ExpenseSortSelector.DATE.title),
-                    color = if (sortParameter.value == ExpenseSortSelector.DATE) Red else BlackBlue,
+                    color = if (sortParameter.value == ExpenseSortSelector.DATE)
+                        LeSaTheme.colors.primary
+                    else LeSaTheme.colors.text,
                     modifier = Modifier
                         .weight(1.5f)
                         .clickable {
@@ -84,7 +83,9 @@ fun ExpensesTableView(
                 ) {
                     MyTextBold(
                         text = stringResource(ExpenseSortSelector.CATEGORY.title),
-                        color = if (sortParameter.value == ExpenseSortSelector.CATEGORY) Red else BlackBlue,
+                        color = if (sortParameter.value == ExpenseSortSelector.CATEGORY)
+                            LeSaTheme.colors.primary
+                        else LeSaTheme.colors.text,
                         modifier = Modifier
                            // .weight(2.5f)
                             .clickable {
@@ -95,7 +96,9 @@ fun ExpensesTableView(
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "",
-                        tint = if (sortParameter.value == ExpenseSortSelector.CATEGORY) Red else BlackBlue,
+                        tint = if (sortParameter.value == ExpenseSortSelector.CATEGORY)
+                            LeSaTheme.colors.primary
+                        else LeSaTheme.colors.text,
                         modifier = Modifier
                             .clickable {
                                 isCategoryMenuDropDown.value = !isCategoryMenuDropDown.value
@@ -119,7 +122,9 @@ fun ExpensesTableView(
                 Spacer(modifier = Modifier.weight(0.1f))
                 MyTextBold(
                     text = stringResource(ExpenseSortSelector.RUB.title),
-                    color = if (sortParameter.value == ExpenseSortSelector.RUB) Red else BlackBlue,
+                    color = if (sortParameter.value == ExpenseSortSelector.RUB)
+                        LeSaTheme.colors.primary
+                    else LeSaTheme.colors.text,
                     modifier = Modifier
                         .weight(2f)
                         .clickable {
@@ -130,7 +135,7 @@ fun ExpensesTableView(
                     textAlign = TextAlign.Center
                 )
             }
-            HorizontalDivider(color = WhiteBlue)
+            HorizontalDivider(color = LeSaTheme.colors.background80)
             LazyColumn() {
                 items(homeUiState.toHomeScreen(
                     sortParameter.value,
@@ -157,7 +162,7 @@ fun ExpensesTableView(
                         rub = expense.rub,
                         navController = navController
                     )
-                    HorizontalDivider(color = WhiteBlue)
+                    HorizontalDivider(color = LeSaTheme.colors.background80)
                 }
             }
         }

@@ -11,14 +11,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.lesa.burunduk.R
 import com.lesa.burunduk.ui.components.MyTextBold
-import com.lesa.burunduk.ui.theme.WhiteRed
+import com.lesa.burunduk.ui.theme.LeSaTheme
 
 @Composable
 fun SumTableView(
     sumForPeriod: HomeUiState
 ) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = WhiteRed),
+        colors = CardDefaults.cardColors(containerColor = LeSaTheme.colors.background80),
         modifier = Modifier
             .fillMaxWidth()
     ) {

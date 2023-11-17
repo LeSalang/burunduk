@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.ShoppingCart
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -32,4 +33,9 @@ object AddExpense: Destinations {
     override val route = "add expense"
 }
 
-val screens = listOf(Stats, Plans, Home, AddExpense)
+object Settings: Destinations {
+    override val icon = Icons.Rounded.Settings
+    override val route = "settings"
+}
+
+val screens = listOf(Stats, Plans, Home, AddExpense, Settings)

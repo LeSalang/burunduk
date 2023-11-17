@@ -10,7 +10,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import com.lesa.burunduk.ui.components.MyTextBold
 import com.lesa.burunduk.ui.components.StatsDropDownMenu
-import com.lesa.burunduk.ui.theme.BlackBlue
+import com.lesa.burunduk.ui.theme.LeSaTheme
 
 class StatsSelectorItem<T>(
     val value: T,
@@ -34,13 +34,13 @@ fun <T> StatsSelector(
     ) {
         MyTextBold(
             text = selectedMenuItem.name,
-            color = BlackBlue,
+            //color = BlackBlue,
             modifier = Modifier
         )
         Icon(
             imageVector = Icons.Default.ArrowDropDown,
             contentDescription = "",
-            tint = BlackBlue,
+            tint = LeSaTheme.colors.text,
             modifier = Modifier
         )
         StatsDropDownMenu(

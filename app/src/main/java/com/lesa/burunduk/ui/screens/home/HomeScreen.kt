@@ -14,7 +14,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.lesa.burunduk.ui.AppViewModelProvider
 import com.lesa.burunduk.ui.screens.home.expenseTableView.ExpensesTableView
-import com.lesa.burunduk.ui.theme.WhiteBlue
+import com.lesa.burunduk.ui.theme.LeSaTheme
 
 @Composable
 fun HomeScreen(
@@ -23,12 +23,12 @@ fun HomeScreen(
 ) {
     val homeUiState by viewModel.homeUiState.collectAsState()
     Column(
-        androidx.compose.ui.Modifier
+        Modifier
             .padding(
                 start = 10.dp,
                 end = 10.dp
             )
-            .background(WhiteBlue)
+            .background(LeSaTheme.colors.background80)
     ) {
         SumTableView(
             sumForPeriod = homeUiState

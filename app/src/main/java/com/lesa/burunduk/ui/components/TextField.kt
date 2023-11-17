@@ -1,46 +1,27 @@
 package com.lesa.burunduk.ui.components
 
-import androidx.compose.animation.core.FastOutLinearInEasing
-import androidx.compose.animation.core.keyframes
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import com.lesa.burunduk.ui.theme.BlackBlue
-import com.lesa.burunduk.ui.theme.Red
+import com.lesa.burunduk.ui.theme.LeSaTheme
 import com.lesa.burunduk.ui.theme.burundukFontFamily
 
 @Composable
 fun MyText(
     text: String,
     modifier: Modifier = Modifier,
-    fontSize: TextUnit = 14.sp,
+    fontSize: TextUnit = LeSaTheme.typography.body.fontSize,
     textAlign: TextAlign = TextAlign.Start,
     maxLines: Int = 1,
     overflow: TextOverflow = TextOverflow.Ellipsis,
-    color: Color = BlackBlue
+    color: Color = LeSaTheme.colors.text
 ) {
-    val animation = remember {
-        keyframes {
-            durationMillis = 300
-            delayMillis = 100
-
-            val firstValue =  IntSize(width = 200, height = 100)
-            val firstFrame = 150
-            val secondValue =  IntSize(width = 300, height = 200)
-            val secondFrame = 250
-
-            firstValue at firstFrame
-            secondValue at secondFrame with FastOutLinearInEasing
-        }
-    }
     Text(
         text = text,
         modifier = modifier,
@@ -57,10 +38,10 @@ fun MyText(
 fun MyTextBold(
     text: String,
     modifier: Modifier = Modifier,
-    fontSize: TextUnit = 14.sp,
+    fontSize: TextUnit = LeSaTheme.typography.head.fontSize,
     textAlign: TextAlign = TextAlign.Start,
     maxLines: Int = 1,
-    color: Color = BlackBlue
+    color: Color = LeSaTheme.colors.text
 ) {
     Text(
         text = text,
@@ -88,7 +69,7 @@ fun MyHeadline(
         fontSize = fontSize,
         textAlign = textAlign,
         fontWeight = fontWeight,
-        color = Red,
+        color = LeSaTheme.colors.primary,
         fontFamily = burundukFontFamily
     )
 }

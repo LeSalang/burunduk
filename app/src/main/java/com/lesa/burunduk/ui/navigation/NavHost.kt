@@ -6,17 +6,21 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.lesa.burunduk.data.settings.ProtoDataStoreManager
 import com.lesa.burunduk.ui.plans.PlansScreen
 import com.lesa.burunduk.ui.screens.FABConfigurator
 import com.lesa.burunduk.ui.screens.expense.ExpenseEntryScreen
 import com.lesa.burunduk.ui.screens.home.HomeScreen
+import com.lesa.burunduk.ui.screens.settings.SettingsScreen
 import com.lesa.burunduk.ui.screens.stats.StatsScreen
 
 @Composable
 fun MyNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    setFABConfigurator: ((FABConfigurator?) -> Unit)
+    setFABConfigurator: ((FABConfigurator?) -> Unit),
+    protoDataStoreManager: ProtoDataStoreManager,
+    //context: Context
 ) {
     NavHost(
         navController = navController,
@@ -40,6 +44,12 @@ fun MyNavHost(
                     navController.navigateUp()
                 },
                 setFABConfigurator = setFABConfigurator
+            )
+        }
+        composable(route = Settings.route) {
+            SettingsScreen(
+                protoDataStoreManager = protoDataStoreManager,
+                //context = context
             )
         }
     }

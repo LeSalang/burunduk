@@ -30,6 +30,13 @@
     <string name="category_other">Other</string>
     <string name="category_all">All categories</string>
 
+    <!-- for Settings -->
+    <string name="pick_color">Pick color</string>
+    <string name="pick_mode">Pick mode</string>
+    <string name="light_mode">Light mode</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="system_mode">System mode</string>
+
     <!-- for List Of Month -->
     <string name="month_january">January</string>
     <string name="month_february">February</string>

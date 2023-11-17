@@ -23,9 +23,7 @@ import androidx.navigation.NavController
 import com.lesa.burunduk.R
 import com.lesa.burunduk.ui.components.MyText
 import com.lesa.burunduk.ui.navigation.AddExpense
-import com.lesa.burunduk.ui.theme.BlackBlue
-import com.lesa.burunduk.ui.theme.Red
-import com.lesa.burunduk.ui.theme.WhiteRed
+import com.lesa.burunduk.ui.theme.LeSaTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -41,10 +39,10 @@ fun ExpandedExpenseCard(
 ) {
     Card(
         colors = CardColors(
-            contentColor = BlackBlue,
-            containerColor = WhiteRed,
-            disabledContainerColor = WhiteRed,
-            disabledContentColor = WhiteRed
+            contentColor = LeSaTheme.colors.text,
+            containerColor = LeSaTheme.colors.background90,
+            disabledContainerColor = LeSaTheme.colors.background90,
+            disabledContentColor = LeSaTheme.colors.background90
             ),
         modifier = Modifier
             .fillMaxWidth()
@@ -64,7 +62,7 @@ fun ExpandedExpenseCard(
                 Modifier.padding(10.dp)
             ) {
                 Row {
-                    MyText(text = "$date: $category", color = Red)
+                    MyText(text = "$date: $category")
                 }
                 Row {
                     Column {

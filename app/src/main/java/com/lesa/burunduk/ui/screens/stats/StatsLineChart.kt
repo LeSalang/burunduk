@@ -17,9 +17,7 @@ import co.yml.charts.ui.linechart.model.LineStyle
 import co.yml.charts.ui.linechart.model.SelectionHighlightPoint
 import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
-import com.lesa.burunduk.ui.theme.Blue
-import com.lesa.burunduk.ui.theme.Red
-import com.lesa.burunduk.ui.theme.WhiteRed
+import com.lesa.burunduk.ui.theme.LeSaTheme
 import kotlin.math.roundToInt
 
 class StatsLineChartState(var points: ArrayList<Point>) {
@@ -36,32 +34,43 @@ fun StatsLineChart(
 
     val xAxisData = AxisData.Builder()
         .axisStepSize(20.dp)
-        .backgroundColor(WhiteRed)
+        .backgroundColor(LeSaTheme.colors.background80)
         .steps(state.points.size - 1)
         .labelData { i ->
             (i + 1).toString()
         }
         .labelAndAxisLinePadding(10.dp)
+        .axisLineColor(LeSaTheme.colors.text)
+        .axisLabelColor(LeSaTheme.colors.text)
         .build()
 
     val yAxisData = AxisData.Builder()
         .steps(STEPS)
-        .backgroundColor(WhiteRed)
+        .backgroundColor(LeSaTheme.colors.background80)
         .labelAndAxisLinePadding(15.dp)
         .labelData { i ->
             val yScale = (max / STEPS)
             (i * yScale).roundToInt().toString() + " \u20BD"
-        }.build()
+        }
+        .axisLineColor(LeSaTheme.colors.text)
+        .axisLabelColor(LeSaTheme.colors.text)
+        .build()
 
     val lineChartData = LineChartData(
         linePlotData = LinePlotData(
             lines = listOf(
                 Line(
                     dataPoints = state.points,
-                    LineStyle(color = Red, width = 5f),
-                    IntersectionPoint(radius = 3.dp),
-                    SelectionHighlightPoint(),
-                    ShadowUnderLine(color = Blue),
+                    LineStyle(color = LeSaTheme.colors.primary, width = 5f),
+                    IntersectionPoint(
+                        radius = 3.dp,
+                        color = LeSaTheme.colors.text
+                    ),
+                    SelectionHighlightPoint(
+                        radius = 5.dp,
+                        color = LeSaTheme.colors.primary
+                    ),
+                    ShadowUnderLine(color = LeSaTheme.colors.base),
                     SelectionHighlightPopUp()
                 )
             ),
@@ -69,7 +78,7 @@ fun StatsLineChart(
         xAxisData = xAxisData,
         yAxisData = yAxisData,
         gridLines = GridLines(),
-        backgroundColor = WhiteRed
+        backgroundColor = LeSaTheme.colors.background80
     )
    /* if (state.points.isEmpty())
         Text(text = "list is empty")

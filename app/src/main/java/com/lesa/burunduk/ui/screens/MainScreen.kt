@@ -7,21 +7,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.lesa.burunduk.data.settings.ProtoDataStoreManager
 import com.lesa.burunduk.ui.components.MyBottomAppBar
 import com.lesa.burunduk.ui.components.MyTopAppBar
 import com.lesa.burunduk.ui.navigation.Home
 import com.lesa.burunduk.ui.navigation.MyNavHost
 import com.lesa.burunduk.ui.navigation.navigateSingleTopTo
 import com.lesa.burunduk.ui.navigation.screens
-import com.lesa.burunduk.ui.theme.WhiteBlue
+import com.lesa.burunduk.ui.theme.LeSaTheme
 
 typealias FABConfigurator = () -> Unit
-@Preview
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    //context: Context,
+    protoDataStoreManager: ProtoDataStoreManager
+) {
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
@@ -31,7 +33,11 @@ fun MainScreen() {
     Scaffold(
         topBar = {
             MyTopAppBar(
-                currentScreen = currentScreen
+                currentScreen = currentScreen,
+                onButtonSelected = { newScreen ->
+                    navController.navigateSingleTopTo(newScreen.route)
+                    currentScreen = newScreen
+                }
             )
         },
         bottomBar = {
@@ -49,9 +55,11 @@ fun MainScreen() {
             MyNavHost(
                 navController = navController,
                 modifier = Modifier.padding(innerPadding),
-                setFABConfigurator = setFabOnClick
+                setFABConfigurator = setFabOnClick,
+                protoDataStoreManager = protoDataStoreManager,
+                //context = context
             )
         },
-        containerColor = WhiteBlue
+        containerColor = LeSaTheme.colors.background80
     )
 }

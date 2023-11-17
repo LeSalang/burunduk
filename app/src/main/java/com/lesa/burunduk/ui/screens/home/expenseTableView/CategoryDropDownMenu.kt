@@ -13,7 +13,7 @@ import com.lesa.burunduk.R
 import com.lesa.burunduk.data.expenses.models.Category
 import com.lesa.burunduk.data.expenses.models.nameId
 import com.lesa.burunduk.ui.components.MyText
-import com.lesa.burunduk.ui.theme.WhiteBlue
+import com.lesa.burunduk.ui.theme.LeSaTheme
 
 @Composable
 fun CategoryDropDownMenu(
@@ -29,7 +29,7 @@ fun CategoryDropDownMenu(
         onDismissRequest = onDismissRequest,
         modifier = Modifier
             .size(200.dp, 400.dp)
-            .background(WhiteBlue)
+            .background(LeSaTheme.colors.background80)
     ) {
         categoryList.forEach {
             DropdownMenuItem(
