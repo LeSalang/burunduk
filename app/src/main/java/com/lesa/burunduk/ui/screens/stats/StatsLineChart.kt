@@ -24,7 +24,7 @@ class StatsLineChartState(var points: ArrayList<Point>) {
     val maxY: Float = points.maxOf { it.y }
 }
 
-private const val STEPS = 10
+private const val STEPS = 5
 
 @Composable
 fun StatsLineChart(

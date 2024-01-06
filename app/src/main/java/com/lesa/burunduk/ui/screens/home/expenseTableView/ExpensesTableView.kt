@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.lesa.burunduk.R
 import com.lesa.burunduk.ui.components.MyTextBold
+import com.lesa.burunduk.ui.navigation.AddExpense
 import com.lesa.burunduk.ui.screens.home.HomeUiState
 import com.lesa.burunduk.ui.screens.home.HomeViewModel
 import com.lesa.burunduk.ui.screens.home.toHomeScreen
@@ -156,6 +157,10 @@ fun ExpensesTableView(
                         onDeleteClick = {
                             coroutineScope.launch { viewModel.deleteExpense(expense.id) }
                         },
+                        onEditClick = {
+                            navController.navigate(AddExpense.route + "?expenseID=${expense.id}")
+
+                        },
                         date = expense.date,
                         category = stringResource(id = expense.category),
                         local = expense.local,
@@ -174,6 +179,7 @@ fun ExpenseCard(
     isExpanded: Boolean,
     onExpandStateChanged: (Boolean) -> Unit,
     onDeleteClick: () -> Unit,
+    onEditClick: () -> Unit,
     date: String,
     category: String,
     local: String,
@@ -185,6 +191,7 @@ fun ExpenseCard(
             expanded = isExpanded,
             onExpandStateChanged = onExpandStateChanged,
             onDeleteClick = onDeleteClick,
+            onEditClick = onEditClick,
             date = date,
             category = category,
             local = local,

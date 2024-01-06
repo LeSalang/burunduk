@@ -11,7 +11,9 @@ import com.lesa.burunduk.data.settings.ProtoDataStoreManager
 import com.lesa.burunduk.data.settings.SettingsData
 import com.lesa.burunduk.ui.screens.MainScreen
 import com.lesa.burunduk.ui.theme.LeSaTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

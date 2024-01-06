@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
@@ -26,12 +25,14 @@ interface ExpenseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertExpense(expense: DBExpense)
 
-    @Update
+   /* @Update
     suspend fun updateExpense(expense: DBExpense)
-
+*/
     @Query("DELETE FROM expense_table WHERE id = :id")
     suspend fun deleteExpense(id: UUID)
 
+    @Query("SELECT * FROM expense_table WHERE id = :id")
+    suspend fun findExpenseById(id: UUID): DBExpense
 
 
     @Query("DELETE FROM expense_table")

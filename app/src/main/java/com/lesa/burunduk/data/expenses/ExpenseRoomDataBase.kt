@@ -1,4 +1,4 @@
-package com.lesa.burunduk.data
+package com.lesa.burunduk.data.expenses
 
 import android.content.Context
 import androidx.room.Database

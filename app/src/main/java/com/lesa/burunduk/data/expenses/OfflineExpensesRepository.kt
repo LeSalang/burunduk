@@ -6,6 +6,8 @@ import com.lesa.burunduk.data.expenses.models.Expense
 import com.lesa.burunduk.data.expenses.storage.DBCategory
 import com.lesa.burunduk.data.expenses.storage.DBExpense
 import com.lesa.burunduk.data.expenses.storage.ExpenseDao
+import com.lesa.burunduk.ui.screens.expenseEntry.ExpenseDetails
+import com.lesa.burunduk.ui.screens.expenseEntry.toExpenseDetails
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDateTime
@@ -32,8 +34,12 @@ class OfflineExpensesRepository(private val expenseDao: ExpenseDao): ExpensesRep
     override suspend fun deleteExpense(id: UUID) =
         expenseDao.deleteExpense(id)
 
-    override suspend fun updateExpense(expense: Expense) =
-        expenseDao.updateExpense(expense.toDBExpense())
+    override suspend fun findExpenseById(id: UUID): ExpenseDetails {
+        return expenseDao.findExpenseById(id).toExpense().toExpenseDetails()
+    }
+
+    /*override suspend fun updateExpense(expense: Expense) =
+        expenseDao.updateExpense(expense.toDBExpense())*/
 }
 
 private fun Expense.toDBExpense(): DBExpense {

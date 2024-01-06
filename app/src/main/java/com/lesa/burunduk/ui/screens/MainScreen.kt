@@ -21,14 +21,13 @@ import com.lesa.burunduk.ui.theme.LeSaTheme
 typealias FABConfigurator = () -> Unit
 @Composable
 fun MainScreen(
-    //context: Context,
     protoDataStoreManager: ProtoDataStoreManager
 ) {
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
     var currentScreen =
-       screens.find { it.route == currentDestination?.route } ?: Home
+       screens.find { it.route == currentDestination?.route?.substringBefore('?') } ?: Home
     val (fabOnClick, setFabOnClick) = remember { mutableStateOf<FABConfigurator?>(null) }
     Scaffold(
         topBar = {

@@ -1,4 +1,4 @@
-package com.lesa.burunduk.data
+package com.lesa.burunduk.data.expenses
 
 import androidx.room.TypeConverter
 import com.lesa.burunduk.data.expenses.storage.DBCategory

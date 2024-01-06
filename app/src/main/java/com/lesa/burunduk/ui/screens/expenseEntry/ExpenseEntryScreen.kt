@@ -1,4 +1,4 @@
-package com.lesa.burunduk.ui.screens.expense
+package com.lesa.burunduk.ui.screens.expenseEntry
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -32,22 +33,28 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lesa.burunduk.R
 import com.lesa.burunduk.data.expenses.models.Category
+import com.lesa.burunduk.data.expenses.models.Expense
 import com.lesa.burunduk.data.expenses.models.nameId
-import com.lesa.burunduk.ui.AppViewModelProvider
 import com.lesa.burunduk.ui.components.MyText
 import com.lesa.burunduk.ui.screens.FABConfigurator
 import com.lesa.burunduk.ui.theme.LeSaTheme
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 @Composable
 fun ExpenseEntryScreen(
-    viewModel: ExpenseEntryViewModel = viewModel(factory = AppViewModelProvider.Factory),
+    viewModel: ExpenseEntryViewModel,
     navigateBack: () -> Unit,
-    setFABConfigurator: ((FABConfigurator?) -> Unit)
+    setFABConfigurator: ((FABConfigurator?) -> Unit),
+    id: UUID = UUID.randomUUID()
 ) {
+    val expense = remember {
+        mutableStateOf(
+            viewModel.expenseUiState.expenseDetails
+        )
+    }
     val coroutineScope = rememberCoroutineScope()
     setFABConfigurator.invoke {
         coroutineScope.launch {
@@ -58,11 +65,15 @@ fun ExpenseEntryScreen(
             }
         }
     }
-   DisposableEffect(Unit) {
-       onDispose {
+    LaunchedEffect(expense.value) {
+        expense.value = viewModel.findExpenseByID(id)
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
            setFABConfigurator(null)
-       }
-   }
+        }
+    }
     Column (
         Modifier
             .padding(
@@ -72,16 +83,20 @@ fun ExpenseEntryScreen(
             .background(LeSaTheme.colors.background80)
     ){
         ExpenseInputForm(
-            expenseDetails = viewModel.expenseUiState.expenseDetails,
-            onValueChange = viewModel :: updateUiState
+            expenseDetails = expense.value,
+            //expenseDetails = viewModel.expenseUiState.expenseDetails,
+            onValueChange = viewModel :: updateUiState,
+            expense = expense.value.toExpense()!!
         )
     }
 }
 
 @Composable
 private fun ExpenseInputForm(
+    //expenseDetails: Expense,
     expenseDetails: ExpenseDetails,
-    onValueChange: (ExpenseDetails) -> Unit = {}
+    onValueChange: (ExpenseDetails) -> Unit = {},
+    expense: Expense
 ) {
     Spacer(modifier = Modifier.size(10.dp))
     Card(
@@ -94,11 +109,14 @@ private fun ExpenseInputForm(
         ) {
             SelectCatRadioButtons(
                 expenseDetails = expenseDetails,
+                //expenseDetails = expenseDetails,
                 onValueChange = onValueChange,
             )
             ExpenseTextField(
                 expenseDetails = expenseDetails,
-                onValueChange = onValueChange
+                //expenseDetails = expenseDetails,
+                onValueChange = onValueChange,
+                expense = expense
             )
         }
     }
@@ -106,8 +124,10 @@ private fun ExpenseInputForm(
 
 @Composable
 private fun ExpenseTextField(
+    //expenseDetails: Expense,
     expenseDetails: ExpenseDetails,
-    onValueChange: (ExpenseDetails) -> Unit = {}
+    onValueChange: (ExpenseDetails) -> Unit = {},
+    expense: Expense
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -119,9 +139,10 @@ private fun ExpenseTextField(
         )
         Spacer(modifier = Modifier.weight(0.1f))
         TextField(
-            value = expenseDetails.local,
+            value = expense.local.toString(),
+            //value = expenseDetails.local,
             onValueChange = {
-                onValueChange(expenseDetails.copy(local = it))
+                //onValueChange(expenseDetails.copy(local = it))
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
@@ -152,9 +173,9 @@ private fun ExpenseTextField(
         )
         Spacer(modifier = Modifier.weight(0.1f))
         TextField(
-            value = expenseDetails.exchangeRate,
+            value = expenseDetails.exchangeRate.toString(),
             onValueChange = {
-                onValueChange(expenseDetails.copy(exchangeRate = it))
+               // onValueChange(expenseDetails.copy(exchangeRate = it))
             },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Number,
@@ -180,6 +201,7 @@ private fun ExpenseTextField(
 
 @Composable
 private fun SelectCatRadioButtons(
+    //expenseDetails: Expense,
     expenseDetails: ExpenseDetails,
     onValueChange: (ExpenseDetails) -> Unit = {},
 ) {
@@ -198,7 +220,7 @@ private fun SelectCatRadioButtons(
             items(allCategories) { category ->
                 val isSelected = category == selectedOption
                 val onClick = {
-                    onValueChange(expenseDetails.copy(category = category))
+                   // onValueChange(expenseDetails.copy(category = category))
                     onOptionSelected(category)
                 }
                 Row(

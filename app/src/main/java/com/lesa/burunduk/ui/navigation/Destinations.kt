@@ -20,7 +20,7 @@ object Home: Destinations {
 
 object Plans: Destinations {
     override val icon = Icons.Rounded.ShoppingCart
-    override val route = "plans"
+    override val route = "shopping lists"
 }
 
 object Stats: Destinations {

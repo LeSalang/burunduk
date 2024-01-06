@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.lesa.burunduk.R
 import com.lesa.burunduk.ui.components.MyText
-import com.lesa.burunduk.ui.navigation.AddExpense
 import com.lesa.burunduk.ui.theme.LeSaTheme
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -31,6 +30,7 @@ fun ExpandedExpenseCard(
     expanded: Boolean,
     onExpandStateChanged: (Boolean) -> Unit,
     onDeleteClick: () -> Unit,
+    onEditClick: () -> Unit,
     date: String,
     category: String,
     local: String,
@@ -83,9 +83,11 @@ fun ExpandedExpenseCard(
                     "delete"
                 )
             }
-            IconButton(onClick = {
-                navController.navigate(AddExpense.route)
-            }) {
+            IconButton(
+                onClick = {
+                    onEditClick()
+                }
+            ) {
                 Icon(imageVector = Icons.Default.Settings, "")
             }
             IconButton(

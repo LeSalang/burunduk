@@ -1,6 +1,7 @@
 package com.lesa.burunduk.data.expenses
 
 import com.lesa.burunduk.data.expenses.models.Expense
+import com.lesa.burunduk.ui.screens.expenseEntry.ExpenseDetails
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID
 
@@ -16,5 +17,8 @@ interface ExpensesRepository {
 
     suspend fun deleteExpense(id: UUID)
 
-    suspend fun updateExpense(expense: Expense)
+    suspend fun findExpenseById(id: UUID): ExpenseDetails
+    //suspend fun findExpenseById(id: UUID): Expense
+
+    //suspend fun updateExpense(expense: Expense)
 }

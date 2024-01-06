@@ -56,6 +56,9 @@
     <string name="category">Category</string>
     <string name="local">Local</string>
     <string name="rub">RUB</string>
+    <string name="for_day">for day</string>
+    <string name="for_week">for week</string>
+    <string name="for_month">for month</string>
     <string name="expenses_for_day">Expenses for day = %d \u20BD</string>
     <string name="expenses_for_week">Expenses for week = %d \u20BD</string>
     <string name="expenses_for_month">Expenses for month = %d \u20BD</string>
